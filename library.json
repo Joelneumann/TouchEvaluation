@@ -5,17 +5,13 @@
   "homepage": "",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/Joelneumann/TouchEvaluation.git"
   },
   "version": "1.0.0",
   "authors": {
     "name": "Joel Neumann"
   },
   "export": {
-    "include": [
-      "src/*",
-      "examples/*"
-    ],
     "exclude": [
       "platformio.ini",
       "src/main.cpp"
