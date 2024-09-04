@@ -17,7 +17,8 @@
       "examples"
     ],
     "exclude": [
-      "platformio.ini"
+      "platformio.ini",
+      "src/main.cpp"
     ]
   },
   "frameworks": "arduino",
