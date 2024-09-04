@@ -46,7 +46,7 @@ void TouchSensor::serialPrintRawData() {
     for (size_t i = 0; i < data_.size(); ++i) {
         Serial.print(data_[i]);
         if (i < data_.size() - 1) {
-            Serial.print(", ");
+            Serial.print(" ");
         }
     }
     Serial.println("]");

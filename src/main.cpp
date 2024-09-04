@@ -6,12 +6,31 @@
 #include "TouchSensor.h"
 
 
-void setup(){
+TouchSensor touchSensor;
+
+
+void setup() {
     Serial.begin(115200);
+
+    touchSensor.setup(
+            {
+                    {
+                            .prescaler = 3,
+                            .address = 0x48,
+                            .channel_count = 30
+                    },
+                    {
+                            .prescaler = 3,
+                            .address = 0x49,
+                            .channel_count = 30
+                    },
+            }, true);
+
 }
 
 
-void loop(){
-    Serial.println("running");
-    delay(100);
+void loop() {
+    touchSensor.readData();
+    //touchSensor.serialPrintRawData();
+    touchSensor.serialPrintTouches();
 }
