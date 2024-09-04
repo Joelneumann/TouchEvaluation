@@ -4,38 +4,72 @@
 
 #include "TouchSensor.h"
 
-void TouchSensor::setup(int prescaler) {
-    int ret1 = sensor1_.setup(Trill::TRILL_FLEX);
-    int ret2 = sensor2_.setup(Trill::TRILL_FLEX, 0x49);
+void TouchSensor::setup(const std::vector<SensorData>& sensor_data, bool is_circular = false) {
 
-    // TODO: Error handling
-    if (ret1 != 0) {}
-    if (ret2 != 0) {}
+    for (const auto& data : sensor_data) {
+        Trill trill;
 
-    delay(100);
-    sensor1_.setPrescaler(prescaler);
-    delay(50);
-    sensor2_.setPrescaler(prescaler);
-    delay(50);
-    sensor1_.updateBaseline();
-    delay(50);
-    sensor2_.updateBaseline();
-    delay(100);
+        if (trill.setup(Trill::TRILL_FLEX, data.address) != 0) {
+            //TODO: Error Handling
+            return;
+        }
+
+        delay(50);
+        trill.setPrescaler(data.prescaler);
+        delay(50);
+        trill.updateBaseline();
+
+        trill_sensors_.push_back(trill);
+        channel_count_ += data.channel_count;
+    }
+
+    is_circular_ = is_circular;
 }
 
-TouchData TouchSensor::readData() {
+
+void TouchSensor::readData() {
     unsigned int loc = 0;
     auto read_sensor_data = [this, &loc](Trill &sensor) {
         sensor.requestRawData();
         while (sensor.rawDataAvailable()) {
             this->data_[loc++] = sensor.rawDataRead();
-            // Serial.print(data[loc-1]);
-            // Serial.print(", ");
         }
     };
 
-    read_sensor_data(sensor1_);
-    read_sensor_data(sensor2_);
+    for (auto& sensor : trill_sensors_) {
+        read_sensor_data(sensor);
+    }
+}
 
-    return this->data_;
+void TouchSensor::serialPrintRawData() {
+    Serial.print("[");
+    for (size_t i = 0; i < data_.size(); ++i) {
+        Serial.print(data_[i]);
+        if (i < data_.size() - 1) {
+            Serial.print(", ");
+        }
+    }
+    Serial.println("]");
+}
+
+TouchVector TouchSensor::getTouches() {
+    return data_.extractTouches();
+}
+
+void TouchSensor::serialPrintTouches() {
+    TouchVector touches = getTouches();
+
+    Serial.print("[");
+    for (const auto& touch : touches) {
+        Serial.print("[Pos: ");
+        Serial.print(touch.getPosition());
+        Serial.print(", Ch: ");
+        Serial.print(touch.getChannels());
+        Serial.print(", Pres: ");
+        Serial.print(touch.getPressure());
+        Serial.print("]");
+    }
+    Serial.println("]");
+
+
 }
