@@ -13,14 +13,15 @@
   },
   "export": {
     "include": [
-      "src",
-      "examples"
+      "src/*",
+      "examples/*"
     ],
     "exclude": [
       "platformio.ini",
       "src/main.cpp"
     ]
   },
+  "headers": ["Touches/Touch.h", "TouchSensor.h"],
   "frameworks": "arduino",
   "platforms": "espressif32",
   "build": {
