@@ -11,17 +11,18 @@
   "authors": {
     "name": "Joel Neumann"
   },
-  "export": {
-    "exclude": [
-      "platformio.ini",
-      "src/main.cpp"
-    ]
-  },
-  "headers": ["Touches/Touch.h", "TouchSensor.h"],
+  "headers": [
+    "Touches/Touch.h",
+    "TouchSensor.h"
+  ],
   "frameworks": "arduino",
   "platforms": "espressif32",
   "build": {
-    "libArchive": false
+    "srcFilter": [
+      "+<*>",
+      "-<main*.cpp>",
+      "-<../platformio.ini>"
+    ]
   },
   "dependencies": {
     "belaplatform/Trill": "^1.1.6",
