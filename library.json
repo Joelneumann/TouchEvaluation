@@ -1,0 +1,29 @@
+{
+  "name": "TouchEvaluation",
+  "keywords": "Trill, Touch",
+  "description": "Better Touch recognition for Trill",
+  "homepage": "",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "version": "1.0.0",
+  "authors": {
+    "name": "Joel Neumann"
+  },
+  "export": {
+    "include": [
+      "src",
+      "examples"
+    ]
+  },
+  "frameworks": "arduino",
+  "platforms": "espressif32",
+  "build": {
+    "libArchive": false
+  },
+  "dependencies": {
+    "belaplatform/Trill": "^1.1.6",
+    "Wire": "*"
+  }
+}
