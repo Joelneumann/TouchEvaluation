@@ -17,7 +17,7 @@ Touch RawTouch::createTouch(unsigned int shift_count, int max_channels, bool is_
     }
 
     float position = float(weighted_index_pressure) / float(pressure);
-    position += float(start_index_) + float(shift_count);
+    position += float(start_index_) + float(shift_count) + 0.5f;
     if (position >= float(max_channels)) position -= float(max_channels);
 
     if(is_circular){
