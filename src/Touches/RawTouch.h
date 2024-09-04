@@ -16,14 +16,10 @@ public:
     RawTouch() = default;
     explicit RawTouch(unsigned int start_index);
 
-    Touch createTouch(unsigned int shift_count);
+    Touch createTouch(unsigned int shift_count, int max_channels, bool b);
     vector<RawTouch> splitByPeek();
 
-    unsigned int getStartIndex() const;
     void setStartIndex(unsigned int start_index);
-
-    //TODO
-    static RawTouch buildRawTouch(unsigned int values[], int length, int start_index);
 };
 
 #endif // DREA_V2_RAW_TOUCH_H

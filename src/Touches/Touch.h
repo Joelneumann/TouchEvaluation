@@ -8,8 +8,6 @@
 #include <cmath>
 #include <vector>
 
-#define MAX_CHANNELS 60
-
 class Touch {
 private:
     float position_;
@@ -22,7 +20,7 @@ public:
     uint8_t getChannels() const;
     int getPressure() const;
     float getPosition() const;
-    float getRelativePosition(float relative) const;
+    float getRelativeCircularPosition(float relative) const;
 };
 
 typedef std::vector<Touch> TouchVector;

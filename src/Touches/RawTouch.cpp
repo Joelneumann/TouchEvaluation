@@ -6,19 +6,24 @@
 
 RawTouch::RawTouch(unsigned int start_index) : start_index_(start_index) {}
 
-Touch RawTouch::createTouch(unsigned int shift_count) {
+Touch RawTouch::createTouch(unsigned int shift_count, int max_channels, bool is_circular) {
     uint8_t channels = size();
     int pressure = 0;
     unsigned int weighted_index_pressure = 0;
 
     for (int i = 0; i < size(); ++i) {
         weighted_index_pressure += i * (*this)[i];
-        pressure += static_cast<int>((*this)[i]);
+        pressure += int((*this)[i]);
     }
 
-    float position = static_cast<float>(weighted_index_pressure) / static_cast<float>(pressure);
-    position += static_cast<float>(start_index_) + static_cast<float>(shift_count);
-    if (position >= MAX_CHANNELS) position -= MAX_CHANNELS;
+    float position = float(weighted_index_pressure) / float(pressure);
+    position += float(start_index_) + float(shift_count);
+    if (position >= float(max_channels)) position -= float(max_channels);
+
+    if(is_circular){
+        position = position * float(2 * M_PI) / float(max_channels);
+    }
+
     return {position, channels, pressure};
 }
 
@@ -59,18 +64,6 @@ std::vector<RawTouch> RawTouch::splitByPeek() {
     return group;
 }
 
-unsigned int RawTouch::getStartIndex() const {
-    return start_index_;
-}
-
 void RawTouch::setStartIndex(unsigned int start_index) {
     start_index_ = start_index;
-}
-
-RawTouch RawTouch::buildRawTouch(unsigned int values[], int length, int start_index) {
-    RawTouch raw_touch = RawTouch(start_index);
-    for (int i = 0; i < length; ++i) {
-        raw_touch.push_back(values[i]);
-    }
-    return raw_touch;
 }

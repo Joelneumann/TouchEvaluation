@@ -11,16 +11,14 @@
 #include <array>
 
 
-class TouchData : public std::array<unsigned int, MAX_CHANNELS> {
+class RawData : public std::vector<unsigned int> {
 protected:
-    array<unsigned int, MAX_CHANNELS> empty_array = {};
-
     int findIndexOfFirstZero() const;
     unsigned int shiftToFirstZero();
     RawTouchGroup getRawTouchGroups();
 
 public:
-    TouchVector extractTouches();
+    TouchVector extractTouches(bool b);
 };
 
 #endif// DREA_V2_TOUCH_DATA_H

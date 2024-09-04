@@ -16,13 +16,11 @@ void setup() {
             {
                     {
                             .prescaler = 3,
-                            .address = 0x48,
-                            .channel_count = 30
+                            .address = 0x48
                     },
                     {
                             .prescaler = 3,
-                            .address = 0x49,
-                            .channel_count = 30
+                            .address = 0x49
                     },
             }, true);
 

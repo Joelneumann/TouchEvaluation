@@ -2,28 +2,24 @@
 // Created by Joel Neumann on 18.01.24.
 //
 
-#include "TouchData.h"
+#include "RawData.h"
 
-int TouchData::findIndexOfFirstZero() const {
-    for (int i = 0; i < size(); ++i) {
-        if ((*this)[i] == 0) {
-            return i;
-        }
-    }
-    return -1;
+int RawData::findIndexOfFirstZero() const {
+    auto it = std::find(begin(), end(), 0);
+    return it != end() ? std::distance(begin(), it) : -1;
 }
 
-unsigned int TouchData::shiftToFirstZero() {
+unsigned int RawData::shiftToFirstZero() {
     int shift = findIndexOfFirstZero();
     if (shift > 0) {
         std::rotate(begin(), begin() + shift, end());
         return shift;
     }
-    // TODO: Error handling if (shift == -1)
+
     return 0;
 }
 
-RawTouchGroup TouchData::getRawTouchGroups() {
+RawTouchGroup RawData::getRawTouchGroups() {
     RawTouchGroup groups;
     RawTouch current_group;
 
@@ -45,13 +41,16 @@ RawTouchGroup TouchData::getRawTouchGroups() {
     return groups;
 }
 
-TouchVector TouchData::extractTouches() {
-    if (*this == empty_array) {
+TouchVector RawData::extractTouches(bool is_circular) {
+    if (this->empty()) {
         return {};
     }
 
-    unsigned int shifted = shiftToFirstZero();
+    unsigned int shifted = 0;
+    if(is_circular){
+        shifted = this->shiftToFirstZero();
+    }
     RawTouchGroup groups = getRawTouchGroups();
     groups.splitByPeeks();
-    return groups.createTouches(shifted);
+    return groups.createTouches(shifted, size(), is_circular);
 }

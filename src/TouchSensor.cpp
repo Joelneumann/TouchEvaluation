@@ -20,7 +20,6 @@ void TouchSensor::setup(const std::vector<SensorData>& sensor_data, bool is_circ
         trill.updateBaseline();
 
         trill_sensors_.push_back(trill);
-        channel_count_ += data.channel_count;
     }
 
     is_circular_ = is_circular;
@@ -28,11 +27,12 @@ void TouchSensor::setup(const std::vector<SensorData>& sensor_data, bool is_circ
 
 
 void TouchSensor::readData() {
-    unsigned int loc = 0;
-    auto read_sensor_data = [this, &loc](Trill &sensor) {
+    data_.clear();
+
+    auto read_sensor_data = [this](Trill &sensor) {
         sensor.requestRawData();
         while (sensor.rawDataAvailable()) {
-            this->data_[loc++] = sensor.rawDataRead();
+            this->data_.push_back(sensor.rawDataRead());
         }
     };
 
@@ -53,7 +53,7 @@ void TouchSensor::serialPrintRawData() {
 }
 
 TouchVector TouchSensor::getTouches() {
-    return data_.extractTouches();
+    return data_.extractTouches(is_circular_);
 }
 
 void TouchSensor::serialPrintTouches() {

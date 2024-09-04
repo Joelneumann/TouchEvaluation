@@ -16,10 +16,10 @@ int Touch::getPressure() const {
 }
 
 float Touch::getPosition() const {
-    return position_ * float(2 * M_PI) / MAX_CHANNELS;
+    return position_;
 }
 
-float Touch::getRelativePosition(float relative) const {
+float Touch::getRelativeCircularPosition(float relative) const {
     if (relative < 0) {
         relative = fmodf(-relative, float(2 * M_PI));
         relative = float(2 * M_PI) - relative;
